@@ -4,12 +4,13 @@ import 'package:zest/src/features/auth/presentation/pages/auth_page.dart';
 import 'package:zest/src/core/constants/router_paths.dart';
 
 import 'package:zest/main.dart' show loggedIn;
+import 'package:zest/src/features/home/presentation/pages/home_page.dart';
 
 final router = GoRouter(
   redirect: _redirectRouter,
   initialLocation: RouterPaths.home,
   routes: [
-    GoRoute(path: RouterPaths.home, builder: (context, state) => Container()),
+    GoRoute(path: RouterPaths.home, builder: (context, state) => HomePage()),
     GoRoute(path: RouterPaths.auth, builder: (context, state) => AuthPage()),
   ],
 );

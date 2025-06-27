@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:zest/src/config/router/app_router.dart';
-import 'package:zest/src/core/constants/router_paths.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zest/src/core/constants/router_paths.dart';
+
+import 'package:zest/src/config/router/app_router.dart' show router;
+
+import 'package:zest/main.dart' show loggedIn;
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
@@ -19,7 +22,8 @@ class AuthPage extends StatelessWidget {
                 debugPrint('---- logging ----');
                 final pref = await SharedPreferences.getInstance();
                 await pref.setBool('loggedIn', true);
-                router.go(RouterPaths.home);
+                loggedIn = true;
+                router.replace(RouterPaths.home);
               },
               child: Container(color: Colors.blue),
             ),
