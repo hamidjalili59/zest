@@ -14,18 +14,32 @@ class AuthPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         body: Center(
-          child: SizedBox(
-            width: 100,
-            height: 50,
-            child: GestureDetector(
-              onTap: () async {
-                debugPrint('---- logging ----');
-                final pref = await SharedPreferences.getInstance();
-                await pref.setBool('loggedIn', true);
-                loggedIn = true;
-                router.replace(RouterPaths.home);
-              },
-              child: Container(color: Colors.blue),
+          child: GestureDetector(
+            onTap: () async {
+              debugPrint('---- logging ----');
+              final pref = await SharedPreferences.getInstance();
+              await pref.setBool('loggedIn', true);
+              loggedIn = true;
+              router.replace(RouterPaths.home);
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: ColoredBox(
+                color: Colors.blue,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  child: Text(
+                    'ورود به صفحه اصلی',
+                    style: TextTheme.of(context).titleSmall?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
         ),
