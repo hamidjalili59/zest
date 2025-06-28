@@ -1,0 +1,42 @@
+# .github/ISSUE_TEMPLATE/feature_request.yml
+
+name: "🚀 Feature Request"
+description: "Suggest an idea or a new feature for this project."
+title: "[Feature]: "
+labels: ["enhancement", "feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an idea! We appreciate your feedback.
+
+  - type: textarea
+    id: problem-description
+    attributes:
+      label: "Is your feature request related to a problem? Please describe."
+      description: "A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]"
+      placeholder: "It's difficult to manage user settings because..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution-description
+    attributes:
+      label: "Describe the solution you'd like"
+      description: "A clear and concise description of what you want to happen."
+      placeholder: "I would like a new 'Settings' page where users can..."
+    validations:
+      required: true
+
+  - type: input
+    id: related-feature
+    attributes:
+      label: "Related Feature or Screen"
+      description: "Which part of the app is this new feature related to?"
+      placeholder: "e.g., User Profile, Home Screen"
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: "Additional Context"
+      description: "Add any other context, mockups, or screenshots about the feature request here."
