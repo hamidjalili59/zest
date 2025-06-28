@@ -44,7 +44,12 @@ class _DayCounterWidgetState extends State<DayCounterWidget> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Padding(
-        padding: const EdgeInsetsDirectional.only(start: 16, end: 8,top: 4,bottom: 4),
+        padding: const EdgeInsetsDirectional.only(
+          start: 16,
+          end: 8,
+          top: 4,
+          bottom: 4,
+        ),
         child: Row(
           spacing: 8,
           children: List.generate(
@@ -67,7 +72,7 @@ class _DayCounterWidgetState extends State<DayCounterWidget> {
                 boxShadow: index == 0
                     ? [BoxShadow(spreadRadius: .1, blurRadius: 3)]
                     : null,
-                color: index == 0 ? Colors.black : Colors.transparent,
+                color: index == 0 ? Color(0xff242424) : Colors.transparent,
               ),
               child: SizedBox(
                 height: ResponsiveValue<double>(
@@ -107,8 +112,9 @@ class _DayCounterWidgetState extends State<DayCounterWidget> {
                     ),
                     Text(
                       DateTime.now().add(Duration(days: index)).day.toString(),
-                      style: TextTheme.of(context).titleMedium?.copyWith(
+                      style: TextTheme.of(context).titleSmall?.copyWith(
                         color: index == 0 ? Colors.white : Colors.black,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],

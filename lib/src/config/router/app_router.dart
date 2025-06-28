@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' show BuildContext, Container;
+import 'package:flutter/material.dart' show BuildContext;
 import 'package:go_router/go_router.dart';
 import 'package:zest/src/features/auth/presentation/pages/auth_page.dart';
 import 'package:zest/src/core/constants/router_paths.dart';
