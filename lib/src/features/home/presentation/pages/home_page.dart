@@ -38,6 +38,18 @@ class DayCounterWidget extends StatefulWidget {
 
 class _DayCounterWidgetState extends State<DayCounterWidget> {
   final boxSize = Size(48, 54);
+  final today = DateTime.now();
+  final dateList = List<DateTime>.empty(growable: true);
+
+  @override
+  void initState() {
+    dateList.clear();
+    for (int i = -3; i <= 25; i++) {
+      final date = today.add(Duration(days: i));
+      dateList.add(date);
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,10 +65,10 @@ class _DayCounterWidgetState extends State<DayCounterWidget> {
         child: Row(
           spacing: 8,
           children: List.generate(
-            16,
+            dateList.length,
             (index) => DecoratedBox(
               decoration: BoxDecoration(
-                border: index == 0
+                border: dateList[index] == today
                     ? null
                     : Border.all(color: Colors.grey.shade300),
                 borderRadius: BorderRadius.circular(
@@ -69,10 +81,10 @@ class _DayCounterWidgetState extends State<DayCounterWidget> {
                     ],
                   ).value,
                 ),
-                boxShadow: index == 0
+                boxShadow: dateList[index] == today
                     ? [BoxShadow(spreadRadius: .1, blurRadius: 3)]
                     : null,
-                color: index == 0 ? Color(0xff242424) : Colors.transparent,
+                color: dateList[index] == today ? Color(0xff242424) : Colors.transparent,
               ),
               child: SizedBox(
                 height: ResponsiveValue<double>(
@@ -102,18 +114,18 @@ class _DayCounterWidgetState extends State<DayCounterWidget> {
                   children: [
                     Text(
                       DateFormat.E().format(
-                        DateTime.now().add(Duration(days: index)),
+                        dateList[index],
                       ),
                       style: TextTheme.of(context).labelMedium?.copyWith(
-                        color: index == 0
+                        color: dateList[index] == today
                             ? Colors.white60
                             : Colors.grey.shade400,
                       ),
                     ),
                     Text(
-                      DateTime.now().add(Duration(days: index)).day.toString(),
+                      dateList[index].day.toString(),
                       style: TextTheme.of(context).titleSmall?.copyWith(
-                        color: index == 0 ? Colors.white : Colors.black,
+                        color: dateList[index] == today ? Colors.white : Colors.black,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
