@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:zest/src/core/constants/general_constants.dart';
+import 'package:zest/src/features/home/constants/home_constants.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,9 +18,9 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
-            spacing: 8,
+            spacing: GeneralConstants.kMediumSpacing,
             children: [
-              SizedBox(height: 4),
+              const SizedBox(height: GeneralConstants.kSmallSpacing),
               DayCounterWidget(key: widget.key),
               const Placeholder(),
             ],
@@ -37,18 +39,21 @@ class DayCounterWidget extends StatefulWidget {
 }
 
 class _DayCounterWidgetState extends State<DayCounterWidget> {
-  final boxSize = Size(48, 54);
   final today = DateTime.now();
   final dateList = List<DateTime>.empty(growable: true);
 
   @override
   void initState() {
+    super.initState();
     dateList.clear();
-    for (int i = -3; i <= 25; i++) {
+    for (
+      int i = -HomeConstants.kPastDaysCount;
+      i <= HomeConstants.kFutureDaysCount;
+      i++
+    ) {
       final date = today.add(Duration(days: i));
       dateList.add(date);
     }
-    super.initState();
   }
 
   @override
@@ -56,84 +61,99 @@ class _DayCounterWidgetState extends State<DayCounterWidget> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Padding(
-        padding: const EdgeInsetsDirectional.only(
-          start: 16,
-          end: 8,
-          top: 4,
-          bottom: 4,
-        ),
+        padding: HomeConstants.kDayCounterPadding,
         child: Row(
-          spacing: 8,
-          children: List.generate(
-            dateList.length,
-            (index) => DecoratedBox(
+          spacing: GeneralConstants.kMediumSpacing,
+          children: List.generate(dateList.length, (index) {
+            final isToday = dateList[index] == today;
+            return DecoratedBox(
               decoration: BoxDecoration(
-                border: dateList[index] == today
+                border: isToday
                     ? null
-                    : Border.all(color: Colors.grey.shade300),
+                    : Border.all(color: GeneralConstants.kLightBorderColor),
                 borderRadius: BorderRadius.circular(
                   ResponsiveValue<double>(
                     context,
-                    defaultValue: 12,
+                    defaultValue: GeneralConstants.kDefaultBorderRadius,
                     conditionalValues: [
-                      Condition.equals(name: TABLET, value: 12),
-                      Condition.equals(name: DESKTOP, value: 14),
+                      Condition.equals(
+                        name: TABLET,
+                        value: GeneralConstants.kDefaultBorderRadius,
+                      ),
+                      Condition.equals(
+                        name: DESKTOP,
+                        value: GeneralConstants.kDesktopBorderRadius,
+                      ),
                     ],
                   ).value,
                 ),
-                boxShadow: dateList[index] == today
-                    ? [BoxShadow(spreadRadius: .1, blurRadius: 3)]
-                    : null,
-                color: dateList[index] == today ? Color(0xff242424) : Colors.transparent,
+                boxShadow: isToday ? HomeConstants.kTodayBoxShadow : null,
+                color: isToday
+                    ? GeneralConstants.kPrimaryDarkColor
+                    : Colors.transparent,
               ),
               child: SizedBox(
                 height: ResponsiveValue<double>(
                   context,
-                  defaultValue: boxSize.height,
+                  defaultValue: HomeConstants.kDayCounterBoxSize.height,
                   conditionalValues: [
                     Condition.equals(
                       name: TABLET,
-                      value: boxSize.height * 1.25,
+                      value:
+                          HomeConstants.kDayCounterBoxSize.height *
+                          HomeConstants.kTabletSizeMultiplier,
                     ),
                     Condition.equals(
                       name: DESKTOP,
-                      value: boxSize.height * 1.5,
+                      value:
+                          HomeConstants.kDayCounterBoxSize.height *
+                          HomeConstants.kDesktopSizeMultiplier,
                     ),
                   ],
                 ).value,
                 width: ResponsiveValue<double>(
                   context,
-                  defaultValue: boxSize.width,
+                  defaultValue: HomeConstants.kDayCounterBoxSize.width,
                   conditionalValues: [
-                    Condition.equals(name: TABLET, value: boxSize.width * 1.25),
-                    Condition.equals(name: DESKTOP, value: boxSize.width * 1.5),
+                    Condition.equals(
+                      name: TABLET,
+                      value:
+                          HomeConstants.kDayCounterBoxSize.width *
+                          HomeConstants.kTabletSizeMultiplier,
+                    ),
+                    Condition.equals(
+                      name: DESKTOP,
+                      value:
+                          HomeConstants.kDayCounterBoxSize.width *
+                          HomeConstants.kDesktopSizeMultiplier,
+                    ),
                   ],
                 ).value,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      DateFormat.E().format(
-                        dateList[index],
-                      ),
-                      style: TextTheme.of(context).labelMedium?.copyWith(
-                        color: dateList[index] == today
-                            ? Colors.white60
-                            : Colors.grey.shade400,
+                      DateFormat.E().format(dateList[index]),
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: isToday
+                            ? GeneralConstants.kSecondaryTextColorLight
+                            : GeneralConstants.kSubtleTextColor,
                       ),
                     ),
                     Text(
                       dateList[index].day.toString(),
-                      style: TextTheme.of(context).titleSmall?.copyWith(
-                        color: dateList[index] == today ? Colors.white : Colors.black,
-                        fontWeight: FontWeight.w600,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        color: isToday
+                            ? GeneralConstants.kPrimaryTextColorLight
+                            : GeneralConstants.kPrimaryTextColorDark,
+                        fontWeight: GeneralConstants.kSemiBoldFontWeight,
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
-          ),
+            );
+          }),
         ),
       ),
     );
