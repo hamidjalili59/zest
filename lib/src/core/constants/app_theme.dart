@@ -19,16 +19,6 @@ class AppTheme {
   static const double fontSizeMedium = 16.0;
   static const double fontSizeLarge = 18.0;
   static const double fontSizeExtraLarge = 22.0;
-
-  static const double borderRadiusSmall = 4.0;
-  static const double borderRadiusRegular = 8.0;
-  static const double borderRadiusLarge = 12.0;
-  static const double borderRadiusExtraLarge = 24.0;
-
-  static const double paddingSmall = 8.0;
-  static const double paddingRegular = 16.0;
-  static const double paddingLarge = 24.0;
-  static const double paddingExtraLarge = 32.0;
 }
 
 extension OpacityToAlpha on double {

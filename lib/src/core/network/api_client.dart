@@ -1,22 +1,20 @@
 import 'package:dio/dio.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:flutter/foundation.dart';
+import 'package:zest/src/core/constants/general_constants.dart';
 import 'package:zest/src/core/network/token_interceptor.dart';
-
-import '../constants/app_constants.dart' show AppConstants;
 
 class ApiClient {
   ApiClient();
 
   final _dio = Dio(
     BaseOptions(
-      baseUrl: AppConstants.baseUrl,
-      validateStatus:
-          (status) => switch (status) {
-            200 => true,
-            201 => true,
-            _ => false,
-          },
+      baseUrl: GeneralConstants.kApiBaseUrl,
+      validateStatus: (status) => switch (status) {
+        200 => true,
+        201 => true,
+        _ => false,
+      },
     ),
   );
 

@@ -1,11 +1,9 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
+import 'package:zest/src/core/constants/general_constants.dart';
 import 'package:zest/src/features/auth/domain/models/tables/authentication_table.dart'
     show AuthenticationInfo;
 import 'package:path_provider/path_provider.dart';
-
-import 'package:zest/src/core/constants/app_constants.dart'
-    show AppConstants;
 
 part 'database.g.dart';
 
@@ -27,7 +25,7 @@ class AppDatabase extends _$AppDatabase {
 
   static QueryExecutor _openConnection() {
     return driftDatabase(
-      name: AppConstants.dbName,
+      name: GeneralConstants.dbName,
       native: const DriftNativeOptions(
         databaseDirectory: getApplicationSupportDirectory,
       ),
