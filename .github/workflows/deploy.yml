@@ -1,10 +1,14 @@
-name: Deploy Flutter Web to GitHub Pages
+name: Deploy Flutter Web to GitHub Pages (WASM/CanvasKit)
+
 on:
   push:
     branches:
       - master
 jobs:
   build-and-deploy:
+    permissions:
+      contents: write
+
     runs-on: ubuntu-latest
 
     steps:
@@ -21,8 +25,8 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Build Flutter web
-        run: flutter build web --wasm
+      - name: Build Flutter web with CanvasKit (WASM)
+        run: flutter build web --web-renderer canvaskit --wasm
 
       - name: Modify index.html for GitHub Pages
         run: sed -i 's/<base href="\/">/<base href=".\/">/' build/web/index.html
