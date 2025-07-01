@@ -16,7 +16,7 @@ class GeneralConstants {
   static const Color kPrimaryDarkColor = Color(0xff242424);
   static const Color kLightBorderColor = Color(0xFFE0E0E0);
   static const Color kSubtleTextColor = Color(0xFF9E9E9E);
-  static const Color kPrimaryTextColorLight = Colors.white;
+  static const Color kPrimaryTextColorLight = Color(0xffF9FCFF);
   static const Color kSecondaryTextColorLight = Colors.white60;
   static const Color kPrimaryTextColorDark = Colors.black;
 
