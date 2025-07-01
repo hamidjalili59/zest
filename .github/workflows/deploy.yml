@@ -26,7 +26,7 @@ jobs:
         run: flutter pub get
 
       - name: Build Flutter web with CanvasKit (WASM)
-        run: flutter build web --wasm
+        run: flutter build web --wasm --pwa-strategy=none
 
       - name: Modify index.html for GitHub Pages
         run: sed -i 's/<base href="\/">/<base href=".\/">/' build/web/index.html
