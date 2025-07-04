@@ -26,8 +26,9 @@ class CalorieCounter extends StatefulWidget {
 class _CalorieCounterState extends State<CalorieCounter> {
   @override
   Widget build(BuildContext context) {
+    const progress = 0.92;
     return RadialProgressChart(
-      progress: 0.22,
+      progress: progress,
       size: 180,
       strokeWidth: 18,
       progressPaint: Paint()
@@ -44,13 +45,13 @@ class _CalorieCounterState extends State<CalorieCounter> {
             )
         ..strokeWidth = 18
         ..style = PaintingStyle.stroke
-        ..strokeCap = StrokeCap.round,
+        ..strokeCap = StrokeCap.butt,
       trackColor: const Color(0xFF2c3e50),
       centerWidget: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            '${(0.22 * 100).toInt()}%',
+            '${(progress * 100).toInt()}%',
             style: const TextStyle(
               fontSize: 42,
               fontWeight: FontWeight.bold,
