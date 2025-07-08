@@ -1,28 +1,23 @@
-import 'dart:math';
+import 'dart:math' show pi;
 
 import 'package:flutter/material.dart';
 
 class RadialProgressChart extends StatelessWidget {
   final double progress;
-
   final double size;
-
   final double strokeWidth;
-
   final Paint progressPaint;
-
-  final Color trackColor;
-
+  final Paint trackPaint;
   final Widget centerWidget;
 
   const RadialProgressChart({
     super.key,
     required this.progress,
     required this.centerWidget,
+    required this.progressPaint,
+    required this.trackPaint,
     this.size = 180.0,
     this.strokeWidth = 15.0,
-    required this.progressPaint,
-    this.trackColor = Colors.black26,
   });
 
   @override
@@ -38,7 +33,7 @@ class RadialProgressChart extends StatelessWidget {
               progress: progress,
               strokeWidth: strokeWidth,
               progressPaint: progressPaint,
-              trackColor: trackColor,
+              trackPaint: trackPaint,
             ),
           ),
         ),
@@ -52,23 +47,17 @@ class _RadialChartPainter extends CustomPainter {
   final double progress;
   final double strokeWidth;
   final Paint progressPaint;
-  final Color trackColor;
+  final Paint trackPaint;
 
   _RadialChartPainter({
     required this.progress,
     required this.strokeWidth,
     required this.progressPaint,
-    required this.trackColor,
+    required this.trackPaint,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    final trackPaint = Paint()
-      ..color = trackColor
-      ..strokeWidth = strokeWidth
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
-
     final center = Offset(size.width / 2, size.height / 2);
     final radius = (size.width - strokeWidth) / 2;
     const startAngle = -pi / 2;
@@ -96,6 +85,6 @@ class _RadialChartPainter extends CustomPainter {
     return progress != oldDelegate.progress ||
         strokeWidth != oldDelegate.strokeWidth ||
         progressPaint != oldDelegate.progressPaint ||
-        trackColor != oldDelegate.trackColor;
+        trackPaint != oldDelegate.trackPaint;
   }
 }
