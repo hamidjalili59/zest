@@ -22,7 +22,18 @@ class _HomePageState extends State<HomePage> {
             children: [
               const SizedBox(height: GeneralConstants.kSmallSpacing),
               DayCounterWidget(key: widget.key),
-              const HomeDayDetailsWidget(),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: GeneralConstants.kLargePadding,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: GeneralConstants.kLargePadding,
+                  children: [
+                    const HomeDayDetailsWidget(),
+                  ],
+                ),
+              ),
               CalorieChartWidget(),
             ],
           ),
