@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zest/src/core/constants/general_constants.dart';
 import 'package:zest/src/features/home/presentation/widgets/day_counter_widget.dart';
 import 'package:zest/src/features/home/presentation/widgets/home_day_details_widget.dart';
+import 'package:zest/src/features/home/presentation/widgets/linear_chart_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,6 +23,7 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: GeneralConstants.kSmallSpacing),
               DayCounterWidget(key: widget.key),
               const HomeDayDetailsWidget(),
+              CalorieChartWidget(),
             ],
           ),
         ),
