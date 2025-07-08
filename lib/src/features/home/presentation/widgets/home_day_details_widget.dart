@@ -1,4 +1,5 @@
 import 'dart:math' show pi;
+
 import 'package:flutter/material.dart';
 import 'package:zest/src/features/home/presentation/widgets/calorie_chart.dart';
 
@@ -26,27 +27,38 @@ class CalorieCounter extends StatefulWidget {
 class _CalorieCounterState extends State<CalorieCounter> {
   @override
   Widget build(BuildContext context) {
-    const progress = 0.92;
+    const double progress = 0.92;
+    const double size = 180.0;
+    const double strokeWidth = 18.0;
+    final radius = (size - strokeWidth) / 2;
+    final center = Offset(size / 2, size / 2);
+
+    const rotationAngle = -pi / 2;
+
+    final trackPaint = Paint()
+      ..shader = const SweepGradient(
+        colors: [Color(0xFFFE6D32), Color(0xFFFF723C)],
+        transform: GradientRotation(rotationAngle),
+      ).createShader(Rect.fromCircle(center: center, radius: radius))
+      ..strokeWidth = strokeWidth
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    final progressPaint = Paint()
+      ..shader = const SweepGradient(
+        colors: [Color(0xFF3AB791), Color(0xFF48CBA3)],
+        transform: GradientRotation(rotationAngle),
+      ).createShader(Rect.fromCircle(center: center, radius: radius))
+      ..strokeWidth = strokeWidth
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.butt;
+
     return RadialProgressChart(
       progress: progress,
-      size: 180,
-      strokeWidth: 18,
-      progressPaint: Paint()
-        ..shader =
-            const SweepGradient(
-              colors: [Color(0xFF3cff8f), Color(0xFF289e5b)],
-              startAngle: -pi / 2,
-              endAngle: (2 * pi) * 0.8,
-            ).createShader(
-              Rect.fromCircle(
-                center: const Offset(90, 90),
-                radius: (180 - 18) / 2,
-              ),
-            )
-        ..strokeWidth = 18
-        ..style = PaintingStyle.stroke
-        ..strokeCap = StrokeCap.butt,
-      trackColor: const Color(0xFF2c3e50),
+      size: size,
+      strokeWidth: strokeWidth,
+      progressPaint: progressPaint,
+      trackPaint: trackPaint,
       centerWidget: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -55,7 +67,7 @@ class _CalorieCounterState extends State<CalorieCounter> {
             style: const TextStyle(
               fontSize: 42,
               fontWeight: FontWeight.bold,
-              color: Colors.black26,
+              color: Color(0xFF3D4F61),
             ),
           ),
           const SizedBox(height: 4),
@@ -63,7 +75,7 @@ class _CalorieCounterState extends State<CalorieCounter> {
             'Calories',
             style: TextStyle(
               fontSize: 16,
-              color: Colors.black26,
+              color: Color(0xFF5A6B7B),
               letterSpacing: 1.2,
             ),
           ),
@@ -71,13 +83,4 @@ class _CalorieCounterState extends State<CalorieCounter> {
       ),
     );
   }
-}
-
-class ChartData {
-  final int y;
-  final int x;
-  final String text;
-  final Color color;
-
-  ChartData(this.y, this.x, this.text, this.color);
 }
