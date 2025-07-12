@@ -21,7 +21,7 @@ class DailyActivitiesWidget extends StatelessWidget {
       },
       {
         'title': 'crunches',
-        'color': Colors.green,
+        'color': Colors.red,
         'icon': Icons.sports_gymnastics_outlined,
         'value': '25 x 3',
       },
@@ -54,6 +54,7 @@ class DailyActivitiesWidget extends StatelessWidget {
           ),
           ListView.builder(
             shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: activities.length,
             itemBuilder: (context, index) {
               return SizedBox(
