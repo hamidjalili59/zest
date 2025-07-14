@@ -211,7 +211,6 @@ class _CalorieChartWidgetState extends State<CalorieChartWidget> {
                   : null,
               onTapUp: !isDesktopOrWeb
                   ? (details) {
-                      // برای زمانی که فقط یک Tap کوتاه انجام می‌شود، overlay را پنهان کنید
                       _hideOverlay();
                     }
                   : null,
@@ -295,7 +294,6 @@ class _ChartPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final chartHeight = size.height * 0.8;
-    //final labelHeight = size.height * 0.2; // این متغیر در اینجا مستقیماً استفاده نمی‌شود
 
     if (showSecondary && secondaryData != null) {
       final orangeLinePaint = Paint()

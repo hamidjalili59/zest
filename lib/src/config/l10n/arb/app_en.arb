@@ -1,0 +1,26 @@
+{
+  "appTitle": "School Management",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "welcome": "Welcome to School Management",
+  "@welcome": {
+    "description": "Welcome message on landing page"
+  },
+  "home.today_activity": "Today Activities",
+  "@home.today_activity": {
+      "description": "description of today activity"
+   }
+  "home.calories": "Calories",
+  "@home.calories": {
+      "description": "description of Calories"
+   }
+  "home.calorie_burned": "Calories Burned",
+  "@home.calorie_burned": {
+      "description": "description of Calories Burned"
+   }
+  "home.show_previous_week": "Show Previous Week",
+  "@home.show_previous_week": {
+      "description": "description of Show Previous Week"
+   }
+}
