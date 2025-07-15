@@ -1,4 +1,8 @@
 {
+  "day": "Day",
+  "@day": {
+    "description": "Day Word"
+  },
   "appTitle": "School Management",
   "@appTitle": {
     "description": "The title of the application"
