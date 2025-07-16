@@ -3,11 +3,11 @@
   "@day": {
     "description": "Day Word"
   },
-  "appTitle": "School Management",
+  "appTitle": "Zest",
   "@appTitle": {
     "description": "The title of the application"
   },
-  "welcome": "Welcome to School Management",
+  "welcome": "Welcome to Zest",
   "@welcome": {
     "description": "Welcome message on landing page"
   },
