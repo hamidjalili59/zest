@@ -19,6 +19,10 @@
   "@home.calories": {
       "description": "description of Calories"
    }
+  "home.remind": "Remind",
+  "@home.remind": {
+      "description": "description of Remind"
+   }
   "home.calorie_burned": "Calories Burned",
   "@home.calorie_burned": {
       "description": "description of Calories Burned"
