@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:zest/src/core/constants/app_theme.dart';
 import 'package:zest/src/features/home/constants/home_constants.dart';
 
 class HomeBottomNavigationBar extends StatefulWidget {
   const HomeBottomNavigationBar({super.key});
-
   @override
   State<HomeBottomNavigationBar> createState() =>
       _HomeBottomNavigationBarState();
@@ -14,71 +14,69 @@ class _HomeBottomNavigationBarState extends State<HomeBottomNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
-    return NavigationBar(
-      labelPadding: EdgeInsets.zero,
-      height: HomeConstants.kNavigationBarSize,
-      backgroundColor: HomeConstants.kNavigationBarBackGroundColor,
-      elevation: 5,
-      shadowColor: Colors.black,
-      selectedIndex: selectedItem,
-      destinations: [
-        _NavigationItemWidget(
-          icon: Icons.window_outlined,
-          isSelected: selectedItem == 0,
-          onTap: () {
-            selectedItem = 0;
-            setState(() {});
-          },
+    return ClipRRect(
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+      child: BottomAppBar(
+        color: Colors.white.withAlpha(0.03.toAlpha()),
+        elevation: 10,
+        child: SizedBox(
+          height: HomeConstants.kNavigationBarSize,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _NavItem(
+                icon: Icons.calendar_today,
+                index: 0,
+                selected: selectedItem,
+                onTap: (i) => setState(() => selectedItem = i),
+              ),
+              _NavItem(
+                icon: Icons.home,
+                index: 1,
+                selected: selectedItem,
+                onTap: (i) => setState(() => selectedItem = i),
+              ),
+              _NavItem(
+                icon: Icons.person,
+                index: 2,
+                selected: selectedItem,
+                onTap: (i) => setState(() => selectedItem = i),
+              ),
+            ],
+          ),
         ),
-        _NavigationItemWidget(
-          icon: Icons.home_outlined,
-          isSelected: selectedItem == 1,
-          onTap: () {
-            selectedItem = 1;
-            setState(() {});
-          },
-        ),
-        _NavigationItemWidget(
-          icon: Icons.person_outline_rounded,
-          isSelected: selectedItem == 2,
-          onTap: () {
-            selectedItem = 2;
-            setState(() {});
-          },
-        ),
-      ],
+      ),
     );
   }
 }
 
-class _NavigationItemWidget extends StatelessWidget {
-  const _NavigationItemWidget({
+class _NavItem extends StatelessWidget {
+  final IconData icon;
+  final int index;
+  final int selected;
+  final ValueChanged<int> onTap;
+  const _NavItem({
     required this.icon,
-    required this.isSelected,
+    required this.index,
+    required this.selected,
     required this.onTap,
   });
 
-  final IconData icon;
-  final bool isSelected;
-  final void Function() onTap;
-
   @override
   Widget build(BuildContext context) {
+    final isSelected = selected == index;
     return GestureDetector(
-      onTap: onTap,
-      child: CircleAvatar(
-        backgroundColor: isSelected
-            ? HomeConstants.kNavigationBarItemColor
-            : Colors.transparent,
-        child: Icon(
-          icon,
-          size: isSelected
-              ? HomeConstants.kNavigationBarItemSelectedSize
-              : HomeConstants.kNavigationBarItemUnSelectedSize,
+      onTap: () => onTap(index),
+      child: Container(
+        width: 62,
+        height: 42,
+        decoration: BoxDecoration(
           color: isSelected
-              ? HomeConstants.kNavigationBarItemSelectedTextColor
-              : HomeConstants.kNavigationBarItemUnSelectedTextColor,
+              ? Colors.white.withAlpha(0.12.toAlpha())
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
         ),
+        child: Icon(icon, color: isSelected ? Colors.white : Colors.white54),
       ),
     );
   }

@@ -11,21 +11,21 @@
   "@welcome": {
     "description": "Welcome message on landing page"
   },
-  "home.today_activity": "Today Activities",
-  "@home.today_activity": {
+  "home_today_activity": "Today Activities",
+  "@home_today_activity": {
       "description": "description of today activity"
-   }
-  "home.calories": "Calories",
-  "@home.calories": {
+   },
+  "home_calories": "Calories",
+  "@home_calories": {
       "description": "description of Calories"
-   }
-  "home.remind": "Remind",
-  "home.calorie_burned": "Calories Burned",
-  "@home.calorie_burned": {
+   },
+  "home_remind": "Remind",
+  "home_calorie_burned": "Calories Burned",
+  "@home_calorie_burned": {
       "description": "description of Calories Burned"
-   }
-  "home.show_previous_week": "Show Previous Week",
-  "@home.show_previous_week": {
+   },
+  "home_show_previous_week": "Show Previous Week",
+  "@home_show_previous_week": {
       "description": "description of Show Previous Week"
    }
 }
