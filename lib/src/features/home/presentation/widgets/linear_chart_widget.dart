@@ -1,7 +1,11 @@
+// src/features/home/presentation/widgets/linear_chart_widget.dart
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:zest/src/core/constants/app_theme.dart';
+
+const _accentGreen = Color(0xFF35C6A0);
+const _accentOrange = Color(0xFFFE6D32);
 
 class CalorieChartWidget extends StatefulWidget {
   const CalorieChartWidget({super.key});
@@ -13,7 +17,6 @@ class CalorieChartWidget extends StatefulWidget {
 class _CalorieChartWidgetState extends State<CalorieChartWidget> {
   double _percentage = 88.0;
   bool _showSecondaryChart = true;
-
   final List<double> _primaryChartData = [0.1, 0.2, 0.6, 0.4, 0.8, 0.75, 0.85];
   final List<double> _secondaryChartData = [
     0.3,
@@ -46,30 +49,24 @@ class _CalorieChartWidgetState extends State<CalorieChartWidget> {
 
   void _showOverlay(BuildContext context, Offset globalPosition) {
     _overlayEntry?.remove();
-
+    if (_tappedIndex == null) return;
     _overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
         left: globalPosition.dx + 10,
         top: globalPosition.dy - 30,
         child: Material(
           color: Colors.transparent,
-          child: _tappedIndex != null
-              ? Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.black87,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    '${_dayLabels[_tappedIndex!]} - '
-                    '${_tappedChartType == ChartType.primary ? (_primaryChartData[_tappedIndex!] * 100).toInt() : (_secondaryChartData[_tappedIndex!] * 100).toInt()}%',
-                    style: const TextStyle(color: Colors.white, fontSize: 12),
-                  ),
-                )
-              : const SizedBox.shrink(),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            decoration: BoxDecoration(
+              color: Colors.white12,
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Text(
+              '${_dayLabels[_tappedIndex!]} - ${_tappedChartType == ChartType.primary ? (_primaryChartData[_tappedIndex!] * 100).toInt() : (_secondaryChartData[_tappedIndex!] * 100).toInt()}%',
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
         ),
       ),
     );
@@ -86,41 +83,31 @@ class _CalorieChartWidgetState extends State<CalorieChartWidget> {
   }
 
   void _handleInteraction(Offset localPosition, Offset globalPosition) {
-    // از localPosition برای محاسبه ایندکس نقطه در نمودار استفاده می‌کنیم.
-    // مطمئن می‌شویم که localPosition در محدوده نمودار است.
     if (localPosition.dx < 0 ||
-        localPosition.dx > 350 || // 350 عرض تقریبی Container
+        localPosition.dx > 350 ||
         localPosition.dy < 0 ||
         localPosition.dy > 120) {
-      // 120 ارتفاع CustomPaint
       _hideOverlay();
       return;
     }
-
-    final chartWidth = 350.0 - 2 * 24.0; // عرض نمودار بدون padding اصلی
+    final chartWidth = 350.0 - 2 * 24.0;
     final stepX = chartWidth / (_primaryChartData.length - 1);
-    final chartHeight = 120 * 0.8; // ارتفاع واقعی نمودار برای نقاط
-
     final index = (localPosition.dx / stepX).round().clamp(
       0,
       _primaryChartData.length - 1,
     );
 
-    double primaryY = chartHeight - _primaryChartData[index] * chartHeight;
+    double primaryY = (120 * 0.8) - _primaryChartData[index] * (120 * 0.8);
     double secondaryY = _showSecondaryChart
-        ? chartHeight - _secondaryChartData[index] * chartHeight
+        ? (120 * 0.8) - _secondaryChartData[index] * (120 * 0.8)
         : double.infinity;
 
-    ChartType currentChartType;
-    if ((localPosition.dy - primaryY).abs() <
-        (localPosition.dy - secondaryY).abs()) {
-      currentChartType = ChartType.primary;
-    } else {
-      currentChartType = ChartType.secondary;
-    }
+    ChartType currentChartType =
+        (localPosition.dy - primaryY).abs() <
+            (localPosition.dy - secondaryY).abs()
+        ? ChartType.primary
+        : ChartType.secondary;
 
-    // فقط در صورتی که ایندکس یا نوع نمودار تغییر کرده باشد، setState را فراخوانی می‌کنیم
-    // این کار از بازسازی‌های غیرضروری جلوگیری می‌کند.
     if (_tappedIndex != index || _tappedChartType != currentChartType) {
       setState(() {
         _tappedIndex = index;
@@ -132,144 +119,123 @@ class _CalorieChartWidgetState extends State<CalorieChartWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // Determine if the platform is web/desktop or mobile
     final isDesktopOrWeb =
         defaultTargetPlatform == TargetPlatform.windows ||
         defaultTargetPlatform == TargetPlatform.macOS ||
         defaultTargetPlatform == TargetPlatform.linux ||
         defaultTargetPlatform == TargetPlatform.fuchsia;
 
-    return Container(
-      width: 350,
-      padding: const EdgeInsets.all(24.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha(0.05.toAlpha()),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(18),
+      child: BackdropFilter(
+        filter: ui.ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            color: Colors.white.withAlpha(0.03.toAlpha()),
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(color: Colors.white12),
           ),
-        ],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Calories Burned',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Colors.black54,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            '${_percentage.toInt()}%',
-            style: const TextStyle(
-              fontSize: 48,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-          ),
-          const SizedBox(height: 20),
-          // Wrap CustomPaint with MouseRegion and GestureDetector
-          MouseRegion(
-            onHover: isDesktopOrWeb
-                ? (details) {
-                    _handleInteraction(details.localPosition, details.position);
-                  }
-                : null,
-            onExit: isDesktopOrWeb
-                ? (details) {
-                    _hideOverlay();
-                  }
-                : null,
-            child: GestureDetector(
-              onPanDown: !isDesktopOrWeb
-                  ? (details) {
-                      _handleInteraction(
-                        details.localPosition,
-                        details.globalPosition,
-                      );
-                    }
-                  : null,
-              onPanUpdate: !isDesktopOrWeb
-                  ? (details) {
-                      _handleInteraction(
-                        details.localPosition,
-                        details.globalPosition,
-                      );
-                    }
-                  : null,
-              onPanEnd: !isDesktopOrWeb
-                  ? (details) {
-                      _hideOverlay();
-                    }
-                  : null,
-              onTapUp: !isDesktopOrWeb
-                  ? (details) {
-                      _hideOverlay();
-                    }
-                  : null,
-              child: SizedBox(
-                height: 120,
-                child: CustomPaint(
-                  painter: _ChartPainter(
-                    primaryData: _primaryChartData,
-                    secondaryData: _secondaryChartData,
-                    showSecondary: _showSecondaryChart,
-                    labels: _dayLabels,
-                    progress: _percentage / 100.0,
-                    tappedIndex: _tappedIndex,
-                    tappedChartType: _tappedChartType,
-                  ),
-                  size: Size.infinite,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          Slider(
-            value: _percentage,
-            min: 0,
-            max: 100,
-            divisions: 100,
-            label: '${_percentage.toInt()}%',
-            activeColor: const Color(0xFF35C6A0),
-            inactiveColor: const Color(0xFF35C6A0).withAlpha(0.2.toAlpha()),
-            onChanged: (double value) {
-              setState(() {
-                _percentage = value;
-              });
-            },
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Show Previous Week',
-                style: TextStyle(color: Colors.black54),
+                'Calories Burned',
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
-              Switch(
-                value: _showSecondaryChart,
-                onChanged: (bool value) {
-                  setState(() {
-                    _showSecondaryChart = value;
-                  });
-                },
-                activeColor: const Color(0xFFFE6D32),
+              const SizedBox(height: 8),
+              Text(
+                '${_percentage.toInt()}%',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 12),
+              MouseRegion(
+                onHover: isDesktopOrWeb
+                    ? (details) {
+                        _handleInteraction(
+                          details.localPosition,
+                          details.position,
+                        );
+                      }
+                    : null,
+                onExit: isDesktopOrWeb ? (details) => _hideOverlay() : null,
+                child: GestureDetector(
+                  onPanDown: !isDesktopOrWeb
+                      ? (details) => _handleInteraction(
+                          details.localPosition,
+                          details.globalPosition,
+                        )
+                      : null,
+                  onPanUpdate: !isDesktopOrWeb
+                      ? (details) => _handleInteraction(
+                          details.localPosition,
+                          details.globalPosition,
+                        )
+                      : null,
+                  onPanEnd: !isDesktopOrWeb
+                      ? (details) => _hideOverlay()
+                      : null,
+                  child: SizedBox(
+                    height: 120,
+                    child: CustomPaint(
+                      painter: _ChartPainter(
+                        primaryData: _primaryChartData,
+                        secondaryData: _secondaryChartData,
+                        showSecondary: _showSecondaryChart,
+                        labels: _dayLabels,
+                        progress: _percentage / 100.0,
+                        tappedIndex: _tappedIndex,
+                        tappedChartType: _tappedChartType,
+                      ),
+                      size: Size.infinite,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Slider(
+                value: _percentage,
+                min: 0,
+                max: 100,
+                divisions: 100,
+                label: '${_percentage.toInt()}%',
+                activeColor: _accentGreen,
+                inactiveColor: _accentGreen.withAlpha(0.18.toAlpha()),
+                onChanged: (double value) =>
+                    setState(() => _percentage = value),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Show Previous Week',
+                    style: TextStyle(color: Colors.white70),
+                  ),
+                  Switch(
+                    value: _showSecondaryChart,
+                    onChanged: (v) => setState(() => _showSecondaryChart = v),
+                    activeThumbColor: _accentOrange,
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
 }
 
+// ChartType + painter (اینجا مشابه نسخه‌ی قبلی است، رنگ‌ها و fill ها سازگار با تم تاریک هستند)
 enum ChartType { primary, secondary }
 
 class _ChartPainter extends CustomPainter {
@@ -284,7 +250,7 @@ class _ChartPainter extends CustomPainter {
   _ChartPainter({
     required this.primaryData,
     this.secondaryData,
-    this.showSecondary = false,
+    required this.showSecondary,
     required this.labels,
     required this.progress,
     this.tappedIndex,
@@ -297,18 +263,18 @@ class _ChartPainter extends CustomPainter {
 
     if (showSecondary && secondaryData != null) {
       final orangeLinePaint = Paint()
-        ..color = const Color(0xFFFE6D32)
+        ..color = _accentOrange
         ..style = PaintingStyle.stroke
         ..strokeWidth = 3.0
         ..strokeCap = StrokeCap.round;
 
       final orangeFillPaint = Paint()
         ..style = PaintingStyle.fill
-        ..shader =
-            ui.Gradient.linear(const Offset(0, 0), Offset(0, chartHeight), [
-              const Color(0xFFFF723C).withAlpha(0.4.toAlpha()),
-              const Color(0xFFFE6D32).withAlpha(0.0.toAlpha()),
-            ]);
+        ..shader = ui.Gradient.linear(
+          const Offset(0, 0),
+          Offset(0, chartHeight),
+          [_accentOrange.withAlpha(0.28.toAlpha()), _accentOrange.withAlpha(0.0.toAlpha())],
+        );
       _drawChartLine(
         canvas,
         size,
@@ -321,18 +287,19 @@ class _ChartPainter extends CustomPainter {
     }
 
     final greenLinePaint = Paint()
-      ..color = const Color(0xFF35C6A0)
+      ..color = _accentGreen
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3.0
       ..strokeCap = StrokeCap.round;
 
     final greenFillPaint = Paint()
       ..style = PaintingStyle.fill
-      ..shader =
-          ui.Gradient.linear(const Offset(0, 0), Offset(0, chartHeight), [
-            const Color(0xFF35C6A0).withAlpha(0.4.toAlpha()),
-            const Color(0xFF35C6A0).withAlpha(0.0.toAlpha()),
-          ]);
+      ..shader = ui.Gradient.linear(
+        const Offset(0, 0),
+        Offset(0, chartHeight),
+        [_accentGreen.withAlpha(0.28.toAlpha()), _accentGreen.withAlpha(0.0.toAlpha())],
+      );
+
     _drawChartLine(
       canvas,
       size,
@@ -353,13 +320,10 @@ class _ChartPainter extends CustomPainter {
 
       if (tappedChartType == ChartType.primary) {
         y = chartHeight - primaryData[tappedIndex!] * chartHeight;
-        dotColor = const Color(0xFF35C6A0);
-      } else if (tappedChartType == ChartType.secondary &&
-          secondaryData != null) {
-        y = chartHeight - secondaryData![tappedIndex!] * chartHeight;
-        dotColor = const Color(0xFFFE6D32);
+        dotColor = _accentGreen;
       } else {
-        return;
+        y = chartHeight - secondaryData![tappedIndex!] * chartHeight;
+        dotColor = _accentOrange;
       }
 
       final dotPaint = Paint()
@@ -430,7 +394,7 @@ class _ChartPainter extends CustomPainter {
       final textPainter = TextPainter(
         text: TextSpan(
           text: label,
-          style: TextStyle(color: Colors.grey[600], fontSize: 12),
+          style: TextStyle(color: Colors.white54, fontSize: 12),
         ),
         textDirection: TextDirection.ltr,
       );

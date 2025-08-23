@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' show DateFormat;
-import 'package:responsive_framework/responsive_framework.dart';
-
-import 'package:zest/src/core/constants/general_constants.dart';
+import 'package:zest/src/core/constants/app_theme.dart';
 import 'package:zest/src/features/home/constants/home_constants.dart';
+
+const _todayBg = Color(0xFF1E7F66);
 
 class DayCounterWidget extends StatefulWidget {
   const DayCounterWidget({super.key});
@@ -14,7 +14,7 @@ class DayCounterWidget extends StatefulWidget {
 
 class _DayCounterWidgetState extends State<DayCounterWidget> {
   final today = DateTime.now();
-  final dateList = List<DateTime>.empty(growable: true);
+  final dateList = <DateTime>[];
 
   @override
   void initState() {
@@ -25,8 +25,7 @@ class _DayCounterWidgetState extends State<DayCounterWidget> {
       i <= HomeConstants.kFutureDaysCount;
       i++
     ) {
-      final date = today.add(Duration(days: i));
-      dateList.add(date);
+      dateList.add(today.add(Duration(days: i)));
     }
   }
 
@@ -37,105 +36,52 @@ class _DayCounterWidgetState extends State<DayCounterWidget> {
       child: Padding(
         padding: HomeConstants.kDayCounterPadding,
         child: Row(
-          spacing: GeneralConstants.kMediumSpacing,
           children: List.generate(dateList.length, (index) {
-            final isToday = dateList[index] == today;
+            final isToday =
+                dateList[index].day == today.day &&
+                dateList[index].month == today.month &&
+                dateList[index].year == today.year;
             final isAfter = dateList[index].isAfter(today);
-            return DecoratedBox(
+            return Container(
+              margin: const EdgeInsets.only(right: 10),
               decoration: BoxDecoration(
+                color: isToday ? _todayBg : Colors.transparent,
                 border: isToday
                     ? null
                     : Border.all(
-                        color: isAfter
-                            ? GeneralConstants.kDisabledBorderColor
-                            : GeneralConstants.kLightBorderColor,
+                        color: isAfter ? Colors.white10 : Colors.white12,
                       ),
-                borderRadius: BorderRadius.circular(
-                  ResponsiveValue<double>(
-                    context,
-                    defaultValue: GeneralConstants.kDefaultBorderRadius,
-                    conditionalValues: [
-                      Condition.equals(
-                        name: TABLET,
-                        value: GeneralConstants.kDefaultBorderRadius,
-                      ),
-                      Condition.equals(
-                        name: DESKTOP,
-                        value: GeneralConstants.kDesktopBorderRadius,
-                      ),
-                    ],
-                  ).value,
-                ),
-                boxShadow: isToday ? HomeConstants.kTodayBoxShadow : null,
-                color: isToday
-                    ? GeneralConstants.kPrimaryDarkColor
-                    : isAfter
-                    ? GeneralConstants.kDisabledBorderColor
-                    : Colors.transparent,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: isToday
+                    ? [
+                        BoxShadow(
+                          color: _todayBg.withAlpha(0.35.toAlpha()),
+                          blurRadius: 12,
+                          offset: const Offset(0, 8),
+                        ),
+                      ]
+                    : null,
               ),
-              child: SizedBox(
-                height: ResponsiveValue<double>(
-                  context,
-                  defaultValue: HomeConstants.kDayCounterBoxSize.height,
-                  conditionalValues: [
-                    Condition.equals(
-                      name: TABLET,
-                      value:
-                          HomeConstants.kDayCounterBoxSize.height *
-                          HomeConstants.kTabletSizeMultiplier,
+              width: 64,
+              height: 74,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    DateFormat.E().format(dateList[index]),
+                    style: TextStyle(
+                      color: isToday ? Colors.white70 : Colors.white54,
                     ),
-                    Condition.equals(
-                      name: DESKTOP,
-                      value:
-                          HomeConstants.kDayCounterBoxSize.height *
-                          HomeConstants.kDesktopSizeMultiplier,
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    dateList[index].day.toString(),
+                    style: TextStyle(
+                      color: isToday ? Colors.white : Colors.white70,
+                      fontWeight: FontWeight.w700,
                     ),
-                  ],
-                ).value,
-                width: ResponsiveValue<double>(
-                  context,
-                  defaultValue: HomeConstants.kDayCounterBoxSize.width,
-                  conditionalValues: [
-                    Condition.equals(
-                      name: TABLET,
-                      value:
-                          HomeConstants.kDayCounterBoxSize.width *
-                          HomeConstants.kTabletSizeMultiplier,
-                    ),
-                    Condition.equals(
-                      name: DESKTOP,
-                      value:
-                          HomeConstants.kDayCounterBoxSize.width *
-                          HomeConstants.kDesktopSizeMultiplier,
-                    ),
-                  ],
-                ).value,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      DateFormat.E().format(dateList[index]),
-                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: isToday
-                            ? GeneralConstants.kSecondaryTextColorLight
-                            : isAfter
-                            ? GeneralConstants.kSubtleDisabledTextColor
-                            : GeneralConstants.kSubtleTextColor,
-                      ),
-                    ),
-                    Text(
-                      dateList[index].day.toString(),
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        color: isToday
-                            ? GeneralConstants.kPrimaryTextColorLight
-                            : isAfter
-                            ? GeneralConstants.kSubtleDisabledTextColor
-                            : GeneralConstants.kPrimaryTextColorDark,
-                        fontWeight: GeneralConstants.kSemiBoldFontWeight,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           }),

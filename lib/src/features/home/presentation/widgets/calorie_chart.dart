@@ -1,5 +1,5 @@
+// src/features/home/presentation/widgets/calorie_chart.dart
 import 'dart:math' show pi;
-
 import 'package:flutter/material.dart';
 
 class RadialProgressChart extends StatelessWidget {
@@ -63,6 +63,7 @@ class _RadialChartPainter extends CustomPainter {
     const startAngle = -pi / 2;
     final sweepAngle = 2 * pi * progress;
 
+    // track
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
       0,
@@ -71,6 +72,7 @@ class _RadialChartPainter extends CustomPainter {
       trackPaint,
     );
 
+    // progress
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
       startAngle,
