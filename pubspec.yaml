@@ -5,7 +5,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.8.1
+  sdk: ^3.9.0
 
 dependencies:
   flutter:
@@ -13,23 +13,23 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   cupertino_icons: ^1.0.8
-  dio: ^5.8.0+1
-  go_router: ^16.0.0
-  get_it: ^8.0.3
+  dio: ^5.9.0
+  go_router: ^16.2.4
+  get_it: ^8.2.0
   flutter_bloc: ^9.1.1
   intl: ^0.20.2
   drift: ^2.27.0
-  flutter_svg: ^2.2.0
+  flutter_svg: ^2.2.1
   path: ^1.9.1
   path_provider: ^2.1.5
   cached_network_image: ^3.4.1
   shared_preferences: ^2.5.3
-  logger: ^2.6.0
-  device_info_plus: ^11.5.0
-  url_launcher: ^6.3.1
+  logger: ^2.6.2
+  device_info_plus: ^12.1.0
+  url_launcher: ^6.3.2
   drift_flutter: ^0.2.4
-  injectable: ^2.5.0
-  freezed_annotation: ^3.0.0
+  injectable: ^2.5.2
+  freezed_annotation: ^3.1.0
   json_annotation: ^4.9.0
   dio_smart_retry: ^7.0.1
   flutter_animate: ^4.5.2
@@ -42,11 +42,11 @@ dev_dependencies:
     sdk: flutter
   
   flutter_lints: ^6.0.0
-  freezed: ^3.0.6
-  build_runner: ^2.5.4
-  drift_dev: ^2.27.0
-  injectable_generator: ^2.7.0
-  json_serializable: ^6.9.5
+  freezed: ^3.2.3
+  build_runner: ^2.9.0
+  drift_dev: ^2.28.3
+  injectable_generator: ^2.9.0
+  json_serializable: ^6.11.1
 
 
 flutter_gen:
