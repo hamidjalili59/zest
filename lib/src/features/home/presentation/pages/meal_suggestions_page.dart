@@ -45,7 +45,7 @@ class _MealSuggestionsPageState extends State<MealSuggestionsPage> {
 
     if (calories == null || calories <= 0) {
       setState(() {
-        _error = 'لطفاً مقدار کالری معتبر وارد کنید.';
+        _error = 'Please enter a valid calorie value.';
       });
       return;
     }
@@ -58,7 +58,7 @@ class _MealSuggestionsPageState extends State<MealSuggestionsPage> {
 
     if (ingredientsList.isEmpty) {
       setState(() {
-        _error = 'حداقل یک ماده غذایی وارد کنید.';
+        _error = 'Please enter at least one ingredient.';
       });
       return;
     }
@@ -87,7 +87,7 @@ class _MealSuggestionsPageState extends State<MealSuggestionsPage> {
       });
     } catch (e) {
       setState(() {
-        _error = 'خطا در دریافت پیشنهادها: $e';
+        _error = 'Error while fetching meal suggestions: $e';
       });
     } finally {
       if (mounted) {
@@ -197,6 +197,8 @@ Analyze the inputs and generate the MINIFIED JSON response complying with the Ar
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final width = MediaQuery.of(context).size.width;
+    final bool isWide = width > 900;
 
     return HomeScaffold(
       body: SafeArea(
@@ -214,26 +216,34 @@ Analyze the inputs and generate the MINIFIED JSON response complying with the Ar
               ),
               const SizedBox(height: 8),
               const Text(
-                'اقلام مواد غذایی، کالری هدف و نوع رژیم را وارد کن تا Zest برایت پیشنهاد غذا بسازد.',
+                'Enter ingredients, calorie target and diet preferences to generate AI-powered meal suggestions.',
                 style: TextStyle(color: Colors.white70, fontSize: 13),
               ),
               const SizedBox(height: 20),
               Expanded(
-                child: Row(
-                  children: [
-                    // Form side
-                    Flexible(
-                      flex: 3,
-                      child: _buildFormCard(theme),
-                    ),
-                    const SizedBox(width: 20),
-                    // Result side
-                    Flexible(
-                      flex: 4,
-                      child: _buildResultCard(theme),
-                    ),
-                  ],
-                ),
+                child: isWide
+                    ? Row(
+                        children: [
+                          // Form side
+                          Flexible(
+                            flex: 3,
+                            child: _buildFormCard(theme),
+                          ),
+                          const SizedBox(width: 20),
+                          // Result side
+                          Flexible(
+                            flex: 4,
+                            child: _buildResultCard(theme, isWide: true),
+                          ),
+                        ],
+                      )
+                    : ListView(
+                        children: [
+                          _buildFormCard(theme),
+                          const SizedBox(height: 16),
+                          _buildResultCard(theme, isWide: false),
+                        ],
+                      ),
               ),
             ],
           ),
@@ -253,6 +263,7 @@ Analyze the inputs and generate the MINIFIED JSON response complying with the Ar
       child: Form(
         key: _formKey,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
@@ -268,13 +279,13 @@ Analyze the inputs and generate the MINIFIED JSON response complying with the Ar
               decoration: const InputDecoration(
                 labelText: 'Available Ingredients',
                 labelStyle: TextStyle(color: Colors.white70),
-                hintText: 'مثلاً: Sausage, Salt, Tomatoes, Bread, Pepper, Butter',
+                hintText: 'e.g. Sausage, Salt, Tomatoes, Bread, Pepper, Butter',
                 hintStyle: TextStyle(color: Colors.white38),
                 border: OutlineInputBorder(),
               ),
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return 'این فیلد الزامی است.';
+                  return 'This field is required.';
                 }
                 return null;
               },
@@ -291,10 +302,10 @@ Analyze the inputs and generate the MINIFIED JSON response complying with the Ar
               ),
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return 'مقدار کالری را وارد کنید.';
+                  return 'Please enter a calorie value.';
                 }
                 if (int.tryParse(value.trim()) == null) {
-                  return 'لطفاً یک عدد صحیح وارد کنید.';
+                  return 'Please enter an integer number.';
                 }
                 return null;
               },
@@ -404,7 +415,7 @@ Analyze the inputs and generate the MINIFIED JSON response complying with the Ar
               },
               style: const TextStyle(color: Colors.white),
             ),
-            const Spacer(),
+            const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -421,7 +432,7 @@ Analyze the inputs and generate the MINIFIED JSON response complying with the Ar
                       )
                     : const Icon(Icons.auto_awesome),
                 label: Text(
-                  _isLoading ? 'در حال ساخت پیشنهادها...' : 'دریافت پیشنهادهای غذا',
+                  _isLoading ? 'Generating suggestions...' : 'Get meal suggestions',
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.primaryColor,
@@ -440,7 +451,7 @@ Analyze the inputs and generate the MINIFIED JSON response complying with the Ar
     );
   }
 
-  Widget _buildResultCard(ThemeData theme) {
+  Widget _buildResultCard(ThemeData theme, {required bool isWide}) {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
@@ -449,6 +460,7 @@ Analyze the inputs and generate the MINIFIED JSON response complying with the Ar
         border: Border.all(color: Colors.white.withOpacity(0.08)),
       ),
       child: Column(
+        mainAxisSize: isWide ? MainAxisSize.max : MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
@@ -458,13 +470,28 @@ Analyze the inputs and generate the MINIFIED JSON response complying with the Ar
           ),
           const SizedBox(height: 8),
           const Text(
-            'فعلاً خروجی به صورت JSON نمایش داده می‌شود؛ بعداً می‌توانیم آن را به کارت‌های UI تبدیل کنیم.',
+            'Currently the output is shown as JSON; later we can turn it into rich UI cards.',
             style: TextStyle(color: Colors.white60, fontSize: 12),
           ),
           const SizedBox(height: 12),
-          Expanded(
-            child: Container(
+          // For wide screens, use Expanded; for mobile, use fixed height
+          if (isWide)
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.4),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.white12),
+                ),
+                child: _buildResultContent(),
+              ),
+            )
+          else
+            Container(
               width: double.infinity,
+              height: 400, // Fixed height for mobile
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: Colors.black.withOpacity(0.4),
@@ -473,7 +500,6 @@ Analyze the inputs and generate the MINIFIED JSON response complying with the Ar
               ),
               child: _buildResultContent(),
             ),
-          ),
         ],
       ),
     );
@@ -492,7 +518,7 @@ Analyze the inputs and generate the MINIFIED JSON response complying with the Ar
     if (_mealResponse == null) {
       return const Center(
         child: Text(
-          'هنوز درخواستی ارسال نشده است.',
+          'No request has been sent yet.',
           style: TextStyle(color: Colors.white54),
         ),
       );
