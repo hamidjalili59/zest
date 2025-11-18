@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:zest/src/core/constants/app_theme.dart';
+import 'package:zest/src/core/constants/router_paths.dart';
 import 'package:zest/src/features/home/presentation/widgets/day_counter_widget.dart';
 import 'package:zest/src/features/home/presentation/widgets/home_day_details_widget.dart';
 import 'package:zest/src/features/home/presentation/widgets/daily_activities_widget.dart';
@@ -136,6 +138,18 @@ class _ProfileAction extends StatelessWidget {
               Text('هفتگی', style: TextStyle(color: Colors.white70)),
             ],
           ),
+        ),
+        const SizedBox(width: 12),
+        ElevatedButton.icon(
+          onPressed: () => context.push(RouterPaths.mealSuggestions),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: _kAccent1,
+            foregroundColor: Colors.black,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            textStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+          ),
+          icon: const Icon(Icons.auto_awesome, size: 18),
+          label: const Text('AI Meals'),
         ),
         const SizedBox(width: 12),
         CircleAvatar(

@@ -60,8 +60,8 @@ class MealSuggestion {
       name: array[0] as String,
       totalCalories: int.parse(array[1].toString()),
       description: array[2] as String,
-      usedIngredients: (array[3] as List<dynamic>).cast<String>(),
-      missingIngredients: (array[4] as List<dynamic>).cast<String>(),
+      usedIngredients: _parseIngredientsField(array[3]),
+      missingIngredients: _parseIngredientsField(array[4]),
       matchScore: int.parse(array[5].toString()),
       macros: {
         'protein': int.parse(macrosArray[0].toString()),
@@ -82,4 +82,28 @@ class MealSuggestion {
       'macros': macros,
     };
   }
+}
+
+List<String> _parseIngredientsField(dynamic value) {
+  // If the model followed the schema strictly, this will be a List<dynamic>.
+  if (value is List) {
+    return value.map((e) => e.toString()).toList();
+  }
+
+  // Some models may return a comma‑separated string instead of an array.
+  if (value is String) {
+    return value
+        .split(',')
+        .map((e) => e.trim())
+        .where((e) => e.isNotEmpty)
+        .toList();
+  }
+
+  // Fallback: try to coerce to string and split by comma; at worst, single item.
+  return value
+      .toString()
+      .split(',')
+      .map((e) => e.trim())
+      .where((e) => e.isNotEmpty)
+      .toList();
 }
